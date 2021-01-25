@@ -1,0 +1,32 @@
+name: el7-consul
+
+on:
+  push:
+    branches: PENG-17858-el7-consul
+
+  workflow_dispatch:
+    inputs:
+      build_version:
+        description: "Dockerfile path"
+        default: "1.4.0"
+        required: true
+
+jobs:
+  el7-consul:
+    runs-on: tools-low-dind
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Docker build
+        run: |
+          docker build -t consul:build .
+          docker run -v $HOME/consul-rpms:/RPMS consul:build
+          #run $HOME/consul-rpms
+          ls -lah $HOME/consul-rpms          
+          
+      - name: SSH publish package
+        run: |
+          #scp  yumrepo@10.84.113.224:/repos/gdcustom/7/x86_64/Packages
