@@ -3,7 +3,7 @@ name: Webhook trigger
 on:
   workflow_dispatch:
     inputs:
-      files-path: 
+      files_path: 
         description: "Path to RPM files"
         default: "."
         required: false
@@ -19,6 +19,10 @@ on:
         description: "Wether upload or not (yes/no)"
         default: "yes"
         required: false
+      update:
+        description: "Update remote repository (yes/no)"
+        default: "yes"
+        required: false
     
 jobs:
   webhook:
@@ -27,4 +31,4 @@ jobs:
     steps:
       - name: Webhook
         run: |
-         curl -XPOST -u "${{ secrets.ACTION_USER }}:${{ secrets.ACTION_TOKEN }}" -H "Accept: application/vnd.github.everest-preview+json" -H "Content-Type: application/json" https://api.github.com/repos/gannettdigital/cloud-engineering-workflows/actions/workflows/Consul-rpm.yaml/dispatches --data '{"ref":"main","inputs":{"files-path":"'${{ github.event.inputs.files-path'","server":"'${{ github.event.inputs.server'","baseurl":"'${{ github.event.inputs.baseurl }}'","upload":"'${{ github.event.inputs.upload }}'"}}'
+         curl -XPOST -u "${{ secrets.ACTION_USER }}:${{ secrets.ACTION_TOKEN }}" -H "Accept: application/vnd.github.everest-preview+json" -H "Content-Type: application/json" https://api.github.com/repos/gannettdigital/cloud-engineering-workflows/actions/workflows/Consul-rpm.yaml/dispatches --data '{"ref":"main","inputs":{"files_path":"'${{ github.event.inputs.files_path'","server":"'${{ github.event.inputs.server'","baseurl":"'${{ github.event.inputs.baseurl }}'","upload":"'${{ github.event.inputs.upload }}'","update":"'${{ github.event.inputs.update }}'"}}'
